@@ -1,669 +1,837 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RE:ESG 감정 체크 & 리추얼</title>
-  <meta name="description" content="RE:ESG는 감정 인식, 자기 이해, 회복 행동을 연결하는 기관용 감정 회복 워크 도구입니다." />
-  <style>
-    :root {
-      --bg: #f5f7f3;
-      --card: rgba(255, 255, 255, 0.84);
-      --text: #1f2b22;
-      --sub: #5b6a60;
-      --line: rgba(31, 43, 34, 0.12);
-      --accent: #456b52;
-      --accent-dark: #345040;
-      --accent-soft: #e6efe7;
-      --shadow: 0 20px 50px rgba(34, 52, 39, 0.08);
-      --radius-xl: 28px;
-      --radius-lg: 18px;
-      --radius-md: 14px;
-      --maxw: 1080px;
-    }
-
-    * { box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(111, 153, 123, 0.14), transparent 30%),
-        radial-gradient(circle at right 20%, rgba(185, 214, 193, 0.28), transparent 25%),
-        linear-gradient(180deg, #f7faf6 0%, #edf3ee 100%);
-      line-height: 1.6;
-      word-break: keep-all;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .wrap {
-      width: min(calc(100% - 32px), var(--maxw));
-      margin: 0 auto;
-    }
-
-    .hero {
-      padding: 28px 0 18px;
-    }
-
-    .hero-card {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(247,251,247,0.86));
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.7);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
-      padding: 28px;
-    }
-
-    .hero-card::before,
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      pointer-events: none;
-    }
-
-    .hero-card::before {
-      width: 220px;
-      height: 220px;
-      background: rgba(141, 183, 148, 0.14);
-      top: -90px;
-      right: -60px;
-    }
-
-    .hero-card::after {
-      width: 160px;
-      height: 160px;
-      background: rgba(69, 107, 82, 0.08);
-      bottom: -70px;
-      left: -50px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      letter-spacing: 0.02em;
-      color: var(--accent-dark);
-      background: rgba(230, 239, 231, 0.95);
-      border: 1px solid rgba(69, 107, 82, 0.12);
-      padding: 8px 12px;
-      border-radius: 999px;
-      margin-bottom: 16px;
-      position: relative;
-      z-index: 1;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(30px, 4vw, 48px);
-      line-height: 1.18;
-      letter-spacing: -0.03em;
-      position: relative;
-      z-index: 1;
-    }
-
-    .lead {
-      margin: 18px 0 0;
-      font-size: clamp(16px, 2vw, 20px);
-      color: var(--sub);
-      max-width: 760px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 22px;
-      margin-top: 24px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .panel {
-      background: var(--card);
-      border: 1px solid rgba(31, 43, 34, 0.08);
-      border-radius: 22px;
-      padding: 22px;
-      backdrop-filter: blur(10px);
-    }
-
-    .panel h2,
-    .section h2 {
-      margin: 0 0 10px;
-      font-size: clamp(22px, 3vw, 30px);
-      letter-spacing: -0.02em;
-    }
-
-    .panel p,
-    .section p {
-      margin: 0;
-      color: var(--sub);
-      font-size: 15.5px;
-    }
-
-    .bullet-list {
-      list-style: none;
-      padding: 0;
-      margin: 16px 0 0;
-      display: grid;
-      gap: 10px;
-    }
-
-    .bullet-list li {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      color: var(--text);
-      font-size: 15px;
-    }
-
-    .bullet-list li::before {
-      content: "•";
-      color: var(--accent);
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .quick-info {
-      display: grid;
-      gap: 12px;
-    }
-
-    .quick-item {
-      background: rgba(255,255,255,0.84);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-    }
-
-    .quick-item strong {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 4px;
-      color: var(--accent-dark);
-    }
-
-    .quick-item span {
-      display: block;
-      font-size: 14px;
-      color: var(--sub);
-    }
-
-    .section {
-      padding: 18px 0 40px;
-    }
-
-    .section-card {
-      background: rgba(255,255,255,0.72);
-      border: 1px solid rgba(31, 43, 34, 0.08);
-      border-radius: var(--radius-xl);
-      padding: 28px;
-      box-shadow: var(--shadow);
-    }
-
-    .section-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 22px;
-    }
-
-    .section-head p {
-      max-width: 700px;
-    }
-
-    .action-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .action-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(245,248,245,0.92));
-      border: 1px solid rgba(31, 43, 34, 0.1);
-      border-radius: 22px;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100%;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    }
-
-    .action-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 18px 35px rgba(34, 52, 39, 0.10);
-      border-color: rgba(69, 107, 82, 0.24);
-    }
-
-    .action-badge {
-      display: inline-flex;
-      width: fit-content;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      color: var(--accent-dark);
-      background: var(--accent-soft);
-      border-radius: 999px;
-      padding: 7px 11px;
-      margin-bottom: 14px;
-    }
-
-    .action-card h3 {
-      margin: 0 0 10px;
-      font-size: 24px;
-      line-height: 1.3;
-      letter-spacing: -0.02em;
-    }
-
-    .action-card p {
-      margin: 0;
-      color: var(--sub);
-      font-size: 15px;
-      flex-grow: 1;
-    }
-
-    .action-meta {
-      margin: 14px 0 18px;
-      font-size: 13px;
-      color: var(--accent-dark);
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      min-height: 52px;
-      border-radius: 14px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      border: 1px solid transparent;
-      transition: background 0.2s ease, transform 0.18s ease, border-color 0.2s ease;
-      margin-top: auto;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-dark);
-    }
-
-    .btn-secondary {
-      background: #ffffff;
-      color: var(--accent-dark);
-      border-color: rgba(69, 107, 82, 0.20);
-    }
-
-    .btn-secondary:hover {
-      background: #f7faf7;
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-top: 18px;
-    }
-
-    .info-box {
-      background: rgba(255,255,255,0.88);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 20px;
-    }
-
-    .info-box h3 {
-      margin: 0 0 10px;
-      font-size: 18px;
-    }
-
-    .steps {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      gap: 12px;
-    }
-
-    .steps li {
-      display: grid;
-      grid-template-columns: 32px minmax(0, 1fr);
-      gap: 12px;
-      align-items: start;
-      color: var(--sub);
-      font-size: 15px;
-    }
-
-    .step-num {
-      display: inline-grid;
-      place-items: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent-dark);
-      font-size: 14px;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .step-text {
-      min-width: 0;
-      line-height: 1.75;
-      word-break: keep-all;
-    }
-
-    .step-text strong {
-      color: var(--text);
-      font-weight: 700;
-    }
-
-    .cta {
-      padding: 0 0 36px;
-    }
-
-    .cta-card {
-      background: linear-gradient(135deg, #456b52 0%, #5c8466 100%);
-      color: #fff;
-      border-radius: var(--radius-xl);
-      padding: 28px;
-      box-shadow: 0 24px 50px rgba(34, 52, 39, 0.16);
-    }
-
-    .cta-card h2 {
-      margin: 0 0 10px;
-      font-size: clamp(24px, 3vw, 34px);
-      line-height: 1.25;
-    }
-
-    .cta-card p {
-      margin: 0;
-      color: rgba(255,255,255,0.88);
-      font-size: 15.5px;
-      max-width: 760px;
-    }
-
-    .cta-buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 22px;
-      flex-wrap: wrap;
-    }
-
-    .cta-buttons .btn {
-      width: auto;
-      padding: 0 20px;
-      min-width: 180px;
-    }
-
-    .cta-buttons .btn-primary {
-      background: #fff;
-      color: var(--accent-dark);
-    }
-
-    .cta-buttons .btn-primary:hover {
-      background: #eef4ef;
-    }
-
-    .cta-buttons .btn-secondary {
-      background: transparent;
-      color: #fff;
-      border-color: rgba(255,255,255,0.28);
-    }
-
-    .cta-buttons .btn-secondary:hover {
-      background: rgba(255,255,255,0.08);
-    }
-
-    footer {
-      padding: 0 0 44px;
-    }
-
-    .footer-card {
-      text-align: center;
-      color: var(--sub);
-      font-size: 14px;
-      padding: 16px;
-    }
-
-    @media (max-width: 900px) {
-      .hero-grid,
-      .action-grid,
-      .info-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .section-head {
-        align-items: start;
-        flex-direction: column;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .wrap {
-        width: min(calc(100% - 20px), var(--maxw));
-      }
-
-      .hero {
-        padding-top: 12px;
-      }
-
-      .hero-card,
-      .section-card,
-      .cta-card {
-        padding: 20px;
-        border-radius: 22px;
-      }
-
-      .panel,
-      .action-card,
-      .info-box {
-        padding: 18px;
-      }
-
-      h1 {
-        font-size: 30px;
-      }
-
-      .lead {
-        font-size: 15px;
-      }
-
-      .action-card h3 {
-        font-size: 21px;
-      }
-
-      .cta-buttons {
-        flex-direction: column;
-      }
-
-      .cta-buttons .btn {
-        width: 100%;
-      }
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RE:ESG 기관용 감정 체크 &amp; 리추얼 허브</title>
+<meta name="description" content="RE:ESG는 감정 인식, 자기 이해, 회복 행동을 연결하는 기관용 감정 회복 워크 도구입니다."/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS (펀딩 페이지 동일) ─── */
+:root {
+  --e: #2D6A4F;
+  --e-light: #E8F4EE;
+  --e-mid: #B7D9C8;
+  --s: #1B4F72;
+  --s-light: #E8EEF6;
+  --s-mid: #96B8D4;
+  --g: #B7791F;
+  --g-light: #F6EFE4;
+  --g-mid: #E8C99A;
+  --bg: #FAF8F3;
+  --bg2: #F3F0EA;
+  --text: #231F1A;
+  --muted: #7A7568;
+  --border: #DDD8CE;
+  --white: #FFFFFF;
+  --maxw: 1040px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  word-break: keep-all;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.wrap {
+  width: min(calc(100% - 40px), var(--maxw));
+  margin: 0 auto;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(250,248,243,0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo { display: flex; align-items: center; gap: 8px; }
+.nav-dots { display: flex; gap: 4px; }
+.nav-dots span { width: 7px; height: 7px; border-radius: 50%; display: block; }
+.nd-e { background: var(--e); }
+.nd-s { background: var(--s); }
+.nd-g { background: var(--g); }
+.nav-brand {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.9rem; font-weight: 600; color: var(--text); letter-spacing: 0.02em;
+}
+.nav-tag {
+  font-size: 0.68rem; color: var(--muted);
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 3px 10px; border-radius: 100px; letter-spacing: 0.06em;
+}
+.nav-cta {
+  background: var(--e); color: white;
+  font-size: 0.78rem; font-weight: 500;
+  padding: 8px 20px; border-radius: 100px;
+  transition: background 0.2s; letter-spacing: 0.02em;
+}
+.nav-cta:hover { background: #1e4e38; }
+
+/* ─── SHARED ─── */
+.section-label {
+  font-size: 0.68rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::before {
+  content: ''; display: block;
+  width: 24px; height: 1px; background: var(--muted);
+}
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 13px 26px; border-radius: 100px;
+  font-size: 0.85rem; font-weight: 500; cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: var(--white); color: var(--muted);
+  transition: all 0.2s; letter-spacing: 0.02em; white-space: nowrap;
+}
+.btn:hover { border-color: var(--e); color: var(--e); }
+.btn-primary { background: var(--e); border-color: var(--e); color: white; }
+.btn-primary:hover { background: #1e4e38; border-color: #1e4e38; color: white; }
+.btn-outline-white {
+  background: transparent; border-color: rgba(255,255,255,0.28); color: white;
+}
+.btn-outline-white:hover {
+  background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.6); color: white;
+}
+
+/* ─── HERO ─── */
+.hero {
+  padding: 52px 0 0;
+}
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+/* Left — text */
+.hero-left {
+  padding: 64px 56px 64px 60px;
+  background: var(--white);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--e-light); border-radius: 100px;
+  padding: 5px 14px; margin-bottom: 24px; width: fit-content;
+}
+.hero-eyebrow span {
+  font-size: 0.7rem; font-weight: 600; color: var(--e); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.hero-h1 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 700; line-height: 1.35;
+  letter-spacing: -0.02em; margin-bottom: 20px;
+}
+.hero-h1 em { font-style: normal; color: var(--e); }
+.hero-lead {
+  font-size: 0.9rem; color: var(--muted);
+  line-height: 1.9; max-width: 420px; margin-bottom: 32px;
+}
+.hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* Right — dark panel */
+.hero-right {
+  background: var(--text);
+  padding: 48px 44px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+}
+.hero-right::before {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,106,79,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-right::after {
+  content: '';
+  position: absolute; bottom: -40px; left: -40px;
+  width: 160px; height: 160px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(183,121,31,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.quick-label {
+  font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(255,255,255,0.4);
+  margin-bottom: 20px; position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 8px;
+}
+.quick-label::before {
+  content: ''; display: block;
+  width: 18px; height: 1px; background: rgba(255,255,255,0.25);
+}
+.quick-items {
+  display: grid; gap: 10px;
+  position: relative; z-index: 1;
+}
+.quick-item {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 16px 18px;
+  transition: background 0.18s;
+}
+.quick-item:hover { background: rgba(255,255,255,0.09); }
+.quick-item-step {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.35); text-transform: uppercase; margin-bottom: 4px;
+}
+.quick-item strong {
+  display: block; font-size: 0.88rem; font-weight: 600;
+  color: rgba(255,255,255,0.88); margin-bottom: 3px;
+}
+.quick-item span {
+  font-size: 0.75rem; color: rgba(255,255,255,0.5); line-height: 1.6;
+}
+.hero-right-foot {
+  position: relative; z-index: 1; margin-top: 24px;
+  font-size: 0.72rem; color: rgba(255,255,255,0.3);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 16px; line-height: 1.7;
+}
+
+/* ─── SECTION WRAPPER ─── */
+.section { padding: 52px 0 0; }
+
+/* ─── ACTION CARDS ─── */
+.section-head { margin-bottom: 28px; }
+.section-h2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 700; line-height: 1.4; letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.section-h2 em { font-style: normal; color: var(--e); }
+.section-p {
+  font-size: 0.88rem; color: var(--muted); line-height: 1.85; max-width: 580px;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.action-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px 22px;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+}
+.action-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  border-radius: 14px 14px 0 0;
+}
+.step1::before { background: var(--e); }
+.step2::before { background: var(--s); }
+.step3::before { background: var(--g); }
+
+.action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  border-color: rgba(45,106,79,0.3);
+}
+
+.action-badge {
+  display: inline-flex; align-items: center;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px; border-radius: 100px;
+  margin-bottom: 14px; width: fit-content;
+}
+.step1 .action-badge { background: var(--e-light); color: var(--e); }
+.step2 .action-badge { background: var(--s-light); color: var(--s); }
+.step3 .action-badge { background: var(--g-light); color: var(--g); }
+
+.action-card h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.15rem; font-weight: 700;
+  line-height: 1.35; letter-spacing: -0.01em;
+  margin-bottom: 10px; color: var(--text);
+}
+.action-card p {
+  font-size: 0.82rem; color: var(--muted);
+  line-height: 1.85; flex-grow: 1; margin-bottom: 14px;
+}
+.action-meta {
+  font-size: 0.72rem; color: var(--muted);
+  padding: 8px 12px; border-radius: 8px;
+  background: var(--bg2); margin-bottom: 18px;
+  border: 1px solid var(--border);
+}
+
+.action-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 12px; border-radius: 100px;
+  font-size: 0.82rem; font-weight: 500;
+  letter-spacing: 0.02em; transition: all 0.2s;
+  margin-top: auto; text-align: center;
+}
+.step1 .action-btn { background: var(--e); color: white; border: 1.5px solid var(--e); }
+.step1 .action-btn:hover { background: #1e4e38; }
+.step2 .action-btn { background: var(--s); color: white; border: 1.5px solid var(--s); }
+.step2 .action-btn:hover { background: #133a56; }
+.step3 .action-btn { background: var(--white); color: var(--muted); border: 1.5px solid var(--border); }
+.step3 .action-btn:hover { border-color: var(--g); color: var(--g); }
+
+/* ─── OPERATION GUIDE ─── */
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-top: 24px;
+}
+.info-box {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px 22px;
+}
+.info-box h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1rem; font-weight: 600;
+  margin-bottom: 16px; color: var(--text);
+  padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.steps { list-style: none; display: grid; gap: 14px; }
+.steps li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 12px; align-items: start;
+}
+.step-num {
+  display: grid; place-items: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--e-light); color: var(--e);
+  font-size: 0.72rem; font-weight: 700; flex-shrink: 0;
+  font-family: 'Noto Serif KR', serif;
+}
+.info-box.s-box .step-num { background: var(--s-light); color: var(--s); }
+.step-text {
+  font-size: 0.82rem; color: var(--muted); line-height: 1.85;
+  padding-top: 3px;
+}
+.step-text strong { color: var(--text); font-weight: 600; }
+
+/* ─── ESG AXIS ─── */
+.axis-strip {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-top: 24px;
+}
+.axis-tile {
+  border-radius: 12px; padding: 20px 18px;
+  position: relative; overflow: hidden;
+}
+.axis-tile::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+}
+.at-e { background: var(--e-light); }
+.at-e::before { background: var(--e); }
+.at-s { background: var(--s-light); }
+.at-s::before { background: var(--s); }
+.at-g { background: var(--g-light); }
+.at-g::before { background: var(--g); }
+
+.axis-tile-tag {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; padding: 3px 9px; border-radius: 100px;
+  display: inline-block; margin-bottom: 10px;
+}
+.at-e .axis-tile-tag { background: rgba(45,106,79,0.12); color: var(--e); }
+.at-s .axis-tile-tag { background: rgba(27,79,114,0.12); color: var(--s); }
+.at-g .axis-tile-tag { background: rgba(183,121,31,0.15); color: var(--g); }
+
+.axis-tile-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; color: var(--text);
+}
+.axis-tile-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.75; }
+
+/* ─── ABOUT SECTION ─── */
+.about-grid {
+  display: grid; grid-template-columns: 5fr 4fr;
+  gap: 16px; margin-top: 24px;
+}
+.about-main {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; padding: 28px 26px;
+}
+.about-main h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: var(--text);
+}
+.bullet-list { list-style: none; display: grid; gap: 10px; }
+.bullet-list li {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 0.82rem; color: var(--muted); line-height: 1.8;
+}
+.bullet-list li::before {
+  content: '✓'; color: var(--e); font-weight: 700;
+  flex-shrink: 0; margin-top: 2px;
+}
+.about-side { display: grid; gap: 12px; }
+.about-badge {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+}
+.about-badge-label {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+}
+.about-badge-value {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 4px;
+}
+.about-badge-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.6; }
+
+/* ─── CTA ─── */
+.cta-section { padding: 52px 0 64px; }
+.cta-card {
+  background: var(--text);
+  border-radius: 16px; padding: 52px 56px;
+  position: relative; overflow: hidden;
+}
+.cta-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 110%, rgba(45,106,79,0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-inner { position: relative; z-index: 2; }
+.cta-esg {
+  display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap;
+}
+.cta-pill {
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em;
+  padding: 4px 12px; border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.6);
+}
+.cta-h2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  font-weight: 700; line-height: 1.5;
+  color: white; margin-bottom: 14px; max-width: 640px;
+}
+.cta-p {
+  font-size: 0.88rem; color: rgba(255,255,255,0.6);
+  line-height: 1.9; max-width: 580px; margin-bottom: 32px;
+}
+.cta-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.cta-btn-white {
+  background: white; color: var(--text);
+  font-size: 0.88rem; font-weight: 600;
+  padding: 13px 30px; border-radius: 100px;
+  transition: all 0.2s; border: none; cursor: pointer;
+}
+.cta-btn-white:hover { background: var(--g-mid); }
+.cta-btn-ghost {
+  background: transparent; color: rgba(255,255,255,0.8);
+  font-size: 0.88rem; padding: 13px 26px; border-radius: 100px;
+  border: 1.5px solid rgba(255,255,255,0.25); cursor: pointer; transition: all 0.2s;
+}
+.cta-btn-ghost:hover { border-color: rgba(255,255,255,0.6); color: white; }
+
+/* ─── FOOTER ─── */
+footer {
+  background: #1A1714; color: rgba(255,255,255,0.4);
+  padding: 36px 28px; text-align: center;
+}
+.footer-inner { max-width: var(--maxw); margin: 0 auto; }
+.footer-logo {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.footer-brand {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.65);
+}
+.footer-tagline {
+  font-size: 0.72rem; letter-spacing: 0.1em; margin-bottom: 12px;
+}
+.footer-links {
+  display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.footer-links a {
+  font-size: 0.72rem; color: rgba(255,255,255,0.35);
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: rgba(255,255,255,0.7); }
+.footer-copy { font-size: 0.68rem; color: rgba(255,255,255,0.22); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-right { min-height: 320px; }
+  .action-grid { grid-template-columns: 1fr; }
+  .info-grid { grid-template-columns: 1fr; }
+  .axis-strip { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; }
+  nav { padding: 0 20px; }
+}
+
+@media (max-width: 640px) {
+  .wrap { width: min(calc(100% - 24px), var(--maxw)); }
+  .hero { padding-top: 32px; }
+  .hero-left { padding: 40px 28px; }
+  .hero-right { padding: 32px 28px; }
+  .cta-card { padding: 36px 28px; }
+  .cta-btns { flex-direction: column; }
+  .cta-btn-white, .cta-btn-ghost { text-align: center; }
+}
+</style>
 </head>
 <body>
-  <header class="hero">
-    <div class="wrap">
-      <div class="hero-card">
-        <div class="eyebrow">기관용 감정 체크 · 리추얼 허브</div>
-        <h1>RE:ESG 감정 체크 &amp; 리추얼</h1>
-        <p class="lead">
-          RE:ESG는 감정 인식, 자기 이해, 회복 행동을 연결하는 기관용 감정 회복 워크 도구입니다.
-          아래에서 사전 체크, 리추얼, 프로그램 정보를 확인하실 수 있습니다.
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-dots">
+      <span class="nd-e"></span>
+      <span class="nd-s"></span>
+      <span class="nd-g"></span>
+    </div>
+    <span class="nav-brand">RE:ESG</span>
+    <span class="nav-tag">기관용 허브</span>
+  </div>
+  <a class="nav-cta" href="https://tally.so/r/rjV205" target="_blank" rel="noopener">기관 문의하기</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+
+      <!-- Left -->
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <div class="nav-dots" style="gap:3px;">
+            <span class="nd-e" style="width:5px;height:5px;"></span>
+            <span class="nd-s" style="width:5px;height:5px;"></span>
+            <span class="nd-g" style="width:5px;height:5px;"></span>
+          </div>
+          <span>기관용 감정 체크 · 리추얼 허브</span>
+        </div>
+
+        <h1 class="hero-h1">
+          감정을 인식하고,<br>
+          자기를 이해하며,<br>
+          <em>삶에 다시 닻을 내립니다</em>
+        </h1>
+
+        <p class="hero-lead">
+          RE:ESG는 Emotion · Self · Ground를 기반으로,
+          참여자가 현재 감정을 인식하고 스스로를 이해한 뒤
+          작은 회복 행동으로 연결될 수 있도록 설계된 기관용 감정 회복 워크 도구입니다.
         </p>
 
-        <div class="hero-grid">
-          <section class="panel" aria-labelledby="about-reesg">
-            <h2 id="about-reesg">RE:ESG 안내</h2>
-            <p>
-              RE:ESG는 <strong>Emotion · Self · Ground</strong>를 기반으로,
-              참여자가 현재 감정을 인식하고 스스로를 이해한 뒤 작은 회복 행동으로 연결될 수 있도록 설계된 구조입니다.
-            </p>
-            <ul class="bullet-list">
-              <li>워크숍 전·후 감정 체크와 간단한 기록 흐름 제공</li>
-              <li>개인 회복과 집단 참여 경험을 함께 설계할 수 있는 구조</li>
-              <li>기관 현장, 교육 프로그램, 복지·상담 연계 활동에 활용 가능</li>
-            </ul>
-          </section>
+        <div class="hero-btns">
+          <a class="btn btn-primary" href="https://meeyann.github.io/re-esg-test/">사전 감정 체크 시작 →</a>
+          <a class="btn" href="https://meeyann.github.io/re-esg-test/re_esg_qr_ritual_cards_v2_final_links">리추얼 카드 보기</a>
+        </div>
+      </div>
 
-          <aside class="panel" aria-labelledby="quick-guide">
-            <h2 id="quick-guide">빠른 이용 안내</h2>
-            <div class="quick-info">
-              <div class="quick-item">
-                <strong>사전 감정 체크</strong>
-                <span>워크숍 시작 전 현재 상태를 간단히 확인합니다.</span>
-              </div>
-              <div class="quick-item">
-                <strong>워크숍 후 리추얼</strong>
-                <span>참여 후 감정을 정리하고 회복 행동으로 연결합니다.</span>
-              </div>
-              <div class="quick-item">
-                <strong>프로그램 소개</strong>
-                <span>기관용 운영 방향과 적용 방식을 확인합니다.</span>
-              </div>
+      <!-- Right — dark -->
+      <div class="hero-right">
+        <div>
+          <div class="quick-label">빠른 이용 안내</div>
+          <div class="quick-items">
+            <div class="quick-item">
+              <div class="quick-item-step">Step 01</div>
+              <strong>사전 감정 체크</strong>
+              <span>워크숍 시작 전 현재 상태를 간단히 확인합니다.</span>
             </div>
-          </aside>
+            <div class="quick-item">
+              <div class="quick-item-step">Step 02</div>
+              <strong>워크숍 후 리추얼</strong>
+              <span>참여 후 감정을 정리하고 회복 행동으로 연결합니다.</span>
+            </div>
+            <div class="quick-item">
+              <div class="quick-item-step">Step 03</div>
+              <strong>프로그램 소개</strong>
+              <span>기관용 운영 방향과 적용 방식을 확인합니다.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right-foot">
+          감정 인식 → 자기 이해 → 뿌리내림<br>
+          E · S · G — 세 축으로 이루어진 88장 감정 카드 시스템
+        </div>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── 바로 시작하기 ── -->
+  <section class="section" aria-labelledby="main-actions">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">바로 시작하기</div>
+        <h2 class="section-h2" id="main-actions">
+          세 단계로<br>
+          <em>프로그램을 운영합니다</em>
+        </h2>
+        <p class="section-p">
+          실제 운영 시에는 아래 버튼에 테스트, 리추얼, 소개 페이지 주소를 연결하세요.
+          현장 QR 코드에 각 링크를 삽입하면 참여자가 스마트폰으로 바로 접근할 수 있습니다.
+        </p>
+      </div>
+
+      <div class="action-grid">
+        <!-- Step 1 -->
+        <article class="action-card step1">
+          <span class="action-badge">STEP 01 · 사전</span>
+          <h3>사전 감정 체크</h3>
+          <p>
+            워크숍 전 현재 상태를 간단히 확인하고,
+            참여자의 감정 인식 출발점을 파악합니다.
+            12문항으로 8가지 유형 중 하나를 도출합니다.
+          </p>
+          <div class="action-meta">감정 유형 테스트 · 12문항 · 약 3분 소요</div>
+          <a class="action-btn" href="https://meeyann.github.io/re-esg-test/" aria-label="사전 감정 체크 시작">
+            사전 감정 체크 하기 →
+          </a>
+        </article>
+
+        <!-- Step 2 -->
+        <article class="action-card step2">
+          <span class="action-badge">STEP 02 · 워크숍 후</span>
+          <h3>워크숍 후 리추얼</h3>
+          <p>
+            참여 이후 감정을 정리하고,
+            오디오 가이드 · 저널링 질문 · 체크인을 통해
+            오늘의 회복 행동으로 이어집니다.
+          </p>
+          <div class="action-meta">QR 리추얼 카드 · 12장 샘플 · 88장 확장 가능</div>
+          <a class="action-btn" href="https://meeyann.github.io/re-esg-test/re_esg_qr_ritual_cards_v2_final_links" aria-label="워크숍 후 리추얼 시작">
+            워크숍 후 리추얼 시작 →
+          </a>
+        </article>
+
+        <!-- Step 3 -->
+        <article class="action-card step3">
+          <span class="action-badge">STEP 03 · 소개</span>
+          <h3>RE:ESG 프로그램 소개</h3>
+          <p>
+            기관용 워크숍 구성, 활용 목적,
+            운영 방향과 연계 가능성을 확인할 수 있습니다.
+            문의 및 제안서 요청도 가능합니다.
+          </p>
+          <div class="action-meta">홈페이지 · 제안서 요청 · 기관 문의</div>
+          <a class="action-btn" href="https://meeyann.github.io/re-esg/" target="_blank" rel="noopener" aria-label="프로그램 소개 보기">
+            프로그램 소개 보기
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RE:ESG 구조 소개 ── -->
+  <section class="section" aria-labelledby="axis-section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">RE:ESG 구조</div>
+        <h2 class="section-h2" id="axis-section">
+          Emotion · Self · Ground,<br>
+          <em>세 축</em>으로 이루어집니다
+        </h2>
+        <p class="section-p">
+          RE:ESG는 기업의 환경·사회·지배구조(ESG) 개념을 재해석하여,
+          개인의 감정 생태 회복 시스템으로 설계한 카드 도구입니다.
+        </p>
+      </div>
+
+      <div class="axis-strip">
+        <div class="axis-tile at-e">
+          <div class="axis-tile-tag">E — Emotion</div>
+          <div class="axis-tile-title">감정 인식</div>
+          <div class="axis-tile-desc">지금 내 안에서 일어나고 있는 감정에 이름을 붙입니다. 자연 이미지를 매개로, 판단 없이 감정을 바라볼 수 있는 시간을 만듭니다.</div>
+        </div>
+        <div class="axis-tile at-s">
+          <div class="axis-tile-tag">S — Self</div>
+          <div class="axis-tile-title">자기 이해</div>
+          <div class="axis-tile-desc">그 감정이 나의 어떤 가치관, 상처, 욕구와 연결되는지 탐색합니다. 내면 대화 카드를 통해 스스로에게 질문을 던지는 연습을 합니다.</div>
+        </div>
+        <div class="axis-tile at-g">
+          <div class="axis-tile-tag">G — Ground</div>
+          <div class="axis-tile-title">삶에 뿌리내림</div>
+          <div class="axis-tile-desc">감정을 인식하고 이해한 뒤, 일상에서 작은 실천을 통해 뿌리를 내립니다. 회복·안착·충전의 흐름 속에서 지속 가능한 균형을 찾습니다.</div>
+        </div>
+      </div>
+
+      <div class="about-grid" style="margin-top:16px;">
+        <div class="about-main">
+          <h3>기관 현장에서 이렇게 활용합니다</h3>
+          <ul class="bullet-list">
+            <li>워크숍 전·후 감정 체크와 간단한 기록 흐름 제공</li>
+            <li>개인 회복과 집단 참여 경험을 함께 설계할 수 있는 구조</li>
+            <li>기관 현장, 교육 프로그램, 복지·상담 연계 활동에 활용 가능</li>
+            <li>도입형·예방형 프로그램으로 정서 인식과 감정 언어화 지원</li>
+            <li>QR 리추얼과 워크북 연결로 참여 이후 행동 지속성 향상</li>
+          </ul>
+        </div>
+        <div class="about-side">
+          <div class="about-badge">
+            <div class="about-badge-label">Card System</div>
+            <div class="about-badge-value">본문 88장 구성</div>
+            <div class="about-badge-desc">기본 72장 + 확장 16장 + 가이드 2장 = 총 90장</div>
+          </div>
+          <div class="about-badge">
+            <div class="about-badge-label">Program Type</div>
+            <div class="about-badge-value">1회기 ~ 8회기</div>
+            <div class="about-badge-desc">기관 상황에 따라 파일럿 90분부터 심화 8회기까지 조정 가능</div>
+          </div>
+          <div class="about-badge">
+            <div class="about-badge-label">Target</div>
+            <div class="about-badge-value">복지 · 교육 · 상담 · 기업</div>
+            <div class="about-badge-desc">성인 및 청소년 대상, 기관 목적에 맞춰 커스터마이징 가능</div>
+          </div>
         </div>
       </div>
     </div>
-  </header>
+  </section>
 
-  <main>
-    <section class="section" aria-labelledby="main-actions">
-      <div class="wrap">
-        <div class="section-card">
-          <div class="section-head">
-            <div>
-              <h2 id="main-actions">바로 시작하기</h2>
-              <p>
-                실제 운영 시에는 아래 버튼에 테스트, 리추얼, 소개 페이지의 주소를 연결해서 사용하세요.
-                현재 코드는 시안용으로 <code>#</code> 링크가 들어 있습니다.
-              </p>
-            </div>
-          </div>
+  <!-- ── 기관 적용 방식 ── -->
+  <section class="section" aria-labelledby="operation-guide">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-label">기관 적용 방식</div>
+        <h2 class="section-h2" id="operation-guide">
+          권장 운영 흐름과<br>
+          <em>활용 포인트</em>
+        </h2>
+        <p class="section-p">
+          RE:ESG는 기관 현장에서
+          <strong>사전 감정 체크 → 워크숍 진행 → 후속 리추얼 → 결과 정리</strong>의 흐름으로 운영합니다.
+          대상, 회차, 현장 목적에 따라 교육·복지·상담 연계 프로그램으로 조정 가능합니다.
+        </p>
+      </div>
 
-          <div class="action-grid">
-            <article class="action-card">
-              <span class="action-badge">STEP 1</span>
-              <h3>사전 감정 체크</h3>
-              <p>
-                워크숍 전 현재 상태를 간단히 확인하고,
-                참여자의 감정 인식 출발점을 파악합니다.
-              </p>
-              <div class="action-meta">예: 설문 폼, 체크인 페이지, 사전 질문 링크</div>
-              <a class="btn btn-primary" href="RE_ESG_emotion_type_test_v5_final_links.html" aria-label="사전 감정 체크 시작">사전 감정 체크 하기</a>
-            </article>
+      <div class="info-grid">
+        <div class="info-box">
+          <h3>권장 운영 흐름</h3>
+          <ol class="steps">
+            <li>
+              <span class="step-num">1</span>
+              <span class="step-text">
+                <strong>사전 감정 체크</strong>로 참여자의 현재 상태와 감정 인식 출발점을 간단히 확인합니다.
+              </span>
+            </li>
+            <li>
+              <span class="step-num">2</span>
+              <span class="step-text">
+                <strong>현장 워크숍</strong>에서 감정 카드, 워크북, 진행자 안내를 통해 감정 인식과 자기 이해를 돕습니다.
+              </span>
+            </li>
+            <li>
+              <span class="step-num">3</span>
+              <span class="step-text">
+                <strong>후속 리추얼</strong>과 워크북 연결로 짧은 정리 행동, 기록, 회복 루틴을 이어가게 합니다.
+              </span>
+            </li>
+          </ol>
+        </div>
 
-            <article class="action-card">
-              <span class="action-badge">STEP 2</span>
-              <h3>워크숍 후 리추얼</h3>
-              <p>
-                참여 이후의 감정을 정리하고,
-                오늘의 회복 행동 또는 짧은 리추얼로 이어집니다.
-              </p>
-              <div class="action-meta">예: 오디오 리추얼, 짧은 영상, 후속 체크 페이지</div>
-              <a class="btn btn-primary" href="re_esg_qr_ritual_cards_v2_final_links.html" aria-label="워크숍 후 리추얼 시작">워크숍 후 리추얼 시작</a>
-            </article>
-
-            <article class="action-card">
-              <span class="action-badge">STEP 3</span>
-              <h3>RE:ESG 프로그램 소개</h3>
-              <p>
-                기관용 워크숍 구성, 활용 목적,
-                운영 방향과 연계 가능성을 확인할 수 있습니다.
-              </p>
-              <div class="action-meta">예: 홈페이지 소개, 제안서 요약, 문의 페이지</div>
-              <a class="btn btn-secondary" href="https://meeyann.github.io/re-esg/" aria-label="RE:ESG 프로그램 소개 보기">프로그램 소개 보기</a>
-            </article>
-          </div>
+        <div class="info-box s-box">
+          <h3>기관 활용 포인트</h3>
+          <ol class="steps">
+            <li>
+              <span class="step-num">1</span>
+              <span class="step-text">
+                정서 인식, 감정 언어화, 자기 이해를 돕는 <strong>도입형·예방형 프로그램</strong>으로 활용할 수 있습니다.
+              </span>
+            </li>
+            <li>
+              <span class="step-num">2</span>
+              <span class="step-text">
+                워크숍 직후 QR 리추얼과 워크북으로 연결해 <strong>참여 이후 행동 지속성</strong>을 높일 수 있습니다.
+              </span>
+            </li>
+            <li>
+              <span class="step-num">3</span>
+              <span class="step-text">
+                기관 상황에 따라 만족도, 후속 응답, 참여 기록을 바탕으로 <strong>간단한 결과 정리</strong>까지 연결할 수 있습니다.
+              </span>
+            </li>
+          </ol>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section" aria-labelledby="operation-guide">
-      <div class="wrap">
-        <div class="section-card">
-          <div class="section-head">
-            <div>
-              <h2 id="operation-guide">기관 적용 방식</h2>
-              <p>
-                RE:ESG는 기관 현장에서 <strong>사전 감정 체크 → 워크숍 진행 → 후속 리추얼 연결 → 결과 정리</strong>의 흐름으로 운영할 수 있습니다.
-                대상, 회차, 현장 목적에 따라 교육·복지·상담 연계 프로그램으로 조정 가능합니다.
-              </p>
-            </div>
+  <!-- ── CTA ── -->
+  <section class="cta-section" aria-labelledby="contact-cta">
+    <div class="wrap">
+      <div class="cta-card">
+        <div class="cta-inner">
+          <div class="cta-esg">
+            <span class="cta-pill">Emotion</span>
+            <span class="cta-pill">Self</span>
+            <span class="cta-pill">Ground</span>
           </div>
-
-          <div class="info-grid">
-            <div class="info-box">
-              <h3>권장 운영 흐름</h3>
-              <ol class="steps">
-                <li><span class="step-num">1</span><span class="step-text"><strong>사전 감정 체크</strong>로 참여자의 현재 상태와 감정 인식 출발점을 간단히 확인합니다.</span></li>
-                <li><span class="step-num">2</span><span class="step-text"><strong>현장 워크숍</strong>에서 감정 카드, 워크북, 진행자 안내를 통해 감정 인식과 자기 이해를 돕습니다.</span></li>
-                <li><span class="step-num">3</span><span class="step-text"><strong>후속 리추얼</strong>과 워크북 연결로 짧은 정리 행동, 기록, 회복 루틴을 이어가게 합니다.</span></li>
-              </ol>
-            </div>
-
-            <div class="info-box">
-              <h3>기관 활용 포인트</h3>
-              <ol class="steps">
-                <li><span class="step-num">1</span><span class="step-text">정서 인식, 감정 언어화, 자기 이해를 돕는 <strong>도입형/예방형 프로그램</strong>으로 활용할 수 있습니다.</span></li>
-                <li><span class="step-num">2</span><span class="step-text">워크숍 직후 QR 리추얼과 워크북으로 연결해 <strong>참여 이후의 행동 지속성</strong>을 높일 수 있습니다.</span></li>
-                <li><span class="step-num">3</span><span class="step-text">기관 상황에 따라 만족도, 후속 응답, 참여 기록 등을 바탕으로 <strong>간단한 결과 정리</strong>까지 연결할 수 있습니다.</span></li>
-              </ol>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta" aria-labelledby="contact-cta">
-      <div class="wrap">
-        <div class="cta-card">
-          <h2 id="contact-cta">감정 인식은 개인의 회복을 돕고,<br>회복은 더 건강한 관계와 참여로 이어질 수 있습니다.</h2>
-          <p>
+          <h2 class="cta-h2" id="contact-cta">
+            감정 인식은 개인의 회복을 돕고,<br>
+            회복은 더 건강한 관계와<br>
+            참여로 이어질 수 있습니다
+          </h2>
+          <p class="cta-p">
             기관 상황에 맞는 파일럿 운영 문의, 제안서 요청, 프로그램 소개 확인은 아래 버튼에서 바로 이어갈 수 있습니다.
             초기 파일럿, 교육 프로그램 연계, 복지·상담 현장 적용 등 목적에 맞춰 논의 가능합니다.
           </p>
-          <div class="cta-buttons">
-            <a class="btn btn-primary" href="https://tally.so/r/rjV205" target="_blank" rel="noopener">기관 문의하기</a>
-            <a class="btn btn-secondary" href="https://tally.so/r/dWlQKN" target="_blank" rel="noopener">제안서 받아보기</a>
-            <a class="btn btn-secondary" href="https://meeyann.github.io/re-esg/" target="_blank" rel="noopener">홈페이지 바로가기</a>
+          <div class="cta-btns">
+            <a class="cta-btn-white" href="https://tally.so/r/rjV205" target="_blank" rel="noopener">기관 문의하기</a>
+            <a class="cta-btn-ghost" href="https://tally.so/r/dWlQKN" target="_blank" rel="noopener">제안서 받아보기</a>
+            <a class="cta-btn-ghost" href="https://meeyann.github.io/re-esg/" target="_blank" rel="noopener">홈페이지 바로가기</a>
           </div>
         </div>
       </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap">
-      <div class="footer-card">
-        © RE:ESG · Emotion · Self · Ground
-      </div>
     </div>
-  </footer>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="nav-dots">
+        <span class="nd-e" style="width:6px;height:6px;"></span>
+        <span class="nd-s" style="width:6px;height:6px;"></span>
+        <span class="nd-g" style="width:6px;height:6px;"></span>
+      </div>
+      <span class="footer-brand">RE:ESG</span>
+    </div>
+    <div class="footer-tagline">Emotion · Self · Ground</div>
+    <div class="footer-links">
+      <a href="https://meeyann.github.io/re-esg-test/">감정 유형 테스트</a>
+      <a href="https://meeyann.github.io/re-esg-test/re_esg_qr_ritual_cards_v2_final_links">QR 리추얼 카드</a>
+      <a href="https://meeyann.github.io/re-esg/" target="_blank" rel="noopener">공식 홈페이지</a>
+      <a href="https://tally.so/r/rjV205" target="_blank" rel="noopener">기관 문의</a>
+      <a href="mailto:amadolab.official@gmail.com">이메일</a>
+    </div>
+    <div class="footer-copy">ⓒ 2026 Amado Lab (아마도랩) · amadolab.official@gmail.com</div>
+  </div>
+</footer>
+
 </body>
 </html>
